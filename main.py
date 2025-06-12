@@ -1,46 +1,30 @@
+import sys
+from stats import get_num_words, get_num_letters
+
 def main():
     
     letter_list = []
-    file_contents = read_file_path("books/frankenstein.txt")
-    word_count = count_words(file_contents)
-    letter_count = count_letters(file_contents)
+    if len(sys.argv) != 2:
+        print('Usage: python3 main.py <path_to_book>')
+        sys.exit(1)
+    file_contents = read_file_path(sys.argv[1])
+    word_count = get_num_words(file_contents)
+    letter_count = get_num_letters(file_contents)
     letter_data = aggregate_letter_data(letter_count)
     
-    print(f"--- Begin report of books/frankenstein.txt ---")
-    print(f"{word_count} words found in the document \n \n")
+    print("============ BOOKBOT ============")
+    print(f"Analyzing book found at {sys.argv[1]}...")
+    print("----------- Word Count ----------")
+    print(f"Found {word_count} total words")
+    print("--------- Character Count -------")
     print_letter_data(letter_data)
-    print(f"--- End report ---")
+    print("============= END ===============")
 
 def read_file_path(path):
     
     with open(path) as f:
         
         return f.read()
-
-def count_words(text):
-    
-    word_count = 0
-    
-    for i in text.split():
-        word_count += 1
-    
-    return word_count
-
-def count_letters(text):
-    
-    letters = ['a','b','c','d','e','f','g','h','i','j','k','l',
-    'm','n','o','p','q','r','s','t','u','v','w','x','y','z']
-    letters_dict = {}
-    letter_count = 0
-    
-    for i in letters:
-        for j in text:
-            if j.lower() == i:
-                letter_count += 1
-        letters_dict[i] = letter_count
-        letter_count = 0
-
-    return letters_dict
 
 def aggregate_letter_data(dict):
     dict_list = []
@@ -55,10 +39,10 @@ def aggregate_letter_data(dict):
 def print_letter_data(list):
 
     for i in list:
-        print(f"The '{i["letter"]}' character was found {i["count"]} times\n")
+        print(f"{i["letter"]}:{i["count"]}")
 
 def sort_on(dict):
-    return dict["count"]
+    return int(dict["count"])
 
 main()
 
